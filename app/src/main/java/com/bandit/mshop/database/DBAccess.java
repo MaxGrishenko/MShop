@@ -1,11 +1,13 @@
 package com.bandit.mshop.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.bandit.mshop.adapters.CartAdapterModel;
 import com.bandit.mshop.adapters.CategoryAdapterModel;
 import com.bandit.mshop.adapters.ItemAdapterModel;
 
@@ -99,6 +101,54 @@ public class DBAccess {
         byte[] byteImage = c.getBlob(3);
         Bitmap bitmapImage = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
         return new ItemModel(c.getString(2), bitmapImage, c.getString(4), c.getInt(5));
+    }
+    // Получение bitmap по id
+    public Bitmap getItemImage(int id){
+        c = db.rawQuery("select * from " + TABLE_ITEM + " where " + COLUMN_ID + " like ?", new String[]{String.valueOf(id)}, null );
+        c.moveToFirst();
+        byte[] byteImage = c.getBlob(3);
+        return BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+    }
+    // Для отображение предметов в ListView в фрагменте корзина
+    public CartAdapterModel getCartAdapterModel(){
+        List<Integer> idList = new ArrayList<>();;
+        List<String> nameList = new ArrayList<>();
+        List<Integer> priceList = new ArrayList<>();
+        List<Integer> amountList = new ArrayList<>();
+
+        c = db.rawQuery("select * from " + TABLE_ITEM + " where " + COLUMN_AMOUNT + " > 0", null );
+        if (c.moveToFirst()){
+            do{
+                idList.add(c.getInt(0));
+                nameList.add(c.getString(2));
+                priceList.add(c.getInt(5));
+                amountList.add(c.getInt(7));
+            } while (c.moveToNext());
+        }
+
+        int size = idList.size();
+        Integer[] id = idList.toArray(new Integer[size]);
+        String[] name = nameList.toArray(new String[size]);
+        Integer[] price = priceList.toArray(new Integer[size]);
+        Integer[] amount = amountList.toArray(new Integer[size]);
+
+        return new CartAdapterModel(id,name, price, amount);
+    }
+    // Изменение после добавления item в корзину
+    public void updateItem(int id, int amount){
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_AMOUNT, amount);
+        db.update(TABLE_ITEM, cv, COLUMN_ID + "= ?", new String[] {String.valueOf(id)});
+    }
+    // Имитация продажи
+    public void sellItems(Integer[] cartItemId) {
+        for(int id : cartItemId){
+            updateItem(id, 0);
+        }
+    }
+    // Удаление item по id
+    public void deleteItem(int id) {
+        db.delete(TABLE_ITEM, COLUMN_ID + "= ?", new String[] {String.valueOf(id)});
     }
 
 

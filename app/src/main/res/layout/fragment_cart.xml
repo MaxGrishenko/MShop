@@ -3,201 +3,94 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.ItemFragment"
+    tools:context=".fragments.CartFragment"
 
-    android:id="@+id/layoutItemFragment"
-    android:background="@color/purple_700"
-
+    android:id="@+id/layoutCartFragment"
     android:layout_marginTop="10dp"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
-    android:layout_marginBottom="80dp">
+    android:layout_marginBottom="80dp"
+    android:background="@color/purple_700">
 
     <RelativeLayout
+        android:id="@+id/rlCart"
         android:layout_margin="10dp"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </RelativeLayout>
-
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/circleImageViewPhotoFragment"
-        android:layout_centerHorizontal="true"
-        android:layout_width="175dp"
-        android:layout_height="175dp"
-        android:src="@drawable/ic_test"
-
-        app:civ_border_color="@color/purple_700"
-        app:civ_border_width="1dp"
-        app:civ_shadow="true"
-        app:civ_shadow_radius="5dp"
-        app:civ_shadow_color="@color/purple_700"/>-->
-
     <TextView
-        android:id="@+id/textViewNameFragment"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_below="@id/circleImageViewPhotoFragment"
-
+        android:id="@+id/tvCart"
+        android:layout_alignParentTop="true"
+        android:textSize="16dp"
         android:textStyle="bold"
-        android:layout_width="wrap_content"
+        android:textColor="@color/white"
+        android:background="@color/purple_700"
+        android:text="Корзина"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Название" />
-
+        android:gravity="center_horizontal" />
+    <ListView
+        android:layout_below="@id/tvCart"
+        android:layout_alignBottom="@id/liCart"
+        android:layout_alignLeft="@id/rlCart"
+        android:layout_alignRight="@id/rlCart"
+        android:id="@+id/listViewCart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <LinearLayout
-        android:id="@+id/linearLayoutPriceFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_below="@id/textViewNameFragment"
+        android:id="@+id/liCart"
+        android:layout_above="@id/buttonBackCartFragment"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/purple_700"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal" />
+    <ImageButton
+        android:id="@+id/buttonBackCartFragment"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+
+        android:src="@drawable/ic_test"
+        android:background="@color/white"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+    <LinearLayout
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Цена: "/>
-        <TextView
-            android:id="@+id/textViewPriceFragment"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00"/>
-        <TextView
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="руб."/>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textViewDescriptionFragment"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_below="@id/linearLayoutPriceFragment"
-
+        android:layout_below="@id/liCart"
+        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Бла-бла-бла-Бла-бла-бла-Бла-бла-бла-Бла-бла-бла-Бла-бла-бла-Бла-бла-бла-Бла-бла-бла" />
-
-    <RelativeLayout
-        android:id="@+id/linearLayoutAmountFragment"
-        android:layout_below="@id/textViewDescriptionFragment"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-
-        android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/texViewTemp1Fragment"
-            android:layout_alignParentLeft="true"
-            android:text="Количество:      "
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/textViewAmountFragment"
-            android:layout_toRightOf="@+id/texViewTemp1Fragment"
-            android:text="1"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <ImageButton
-            android:id="@+id/buttonAddAmountFragment"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_test"
-            android:background="@color/white"
-            android:layout_width="40dp"
-            android:layout_height="40dp"/>
-        <ImageButton
-            android:layout_toLeftOf="@id/buttonAddAmountFragment"
-            android:id="@+id/buttonSubAmountFragment"
-            android:src="@drawable/ic_test"
-            android:background="@color/white"
-            android:layout_width="40dp"
-            android:layout_height="40dp"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_below="@id/linearLayoutAmountFragment"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
+            android:text="К оплате: "
             android:textStyle="bold"
-            android:id="@+id/textViewTemp2"
-            android:text="Итоговая цена: "
+            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:text="0"
             android:textStyle="bold"
-            android:id="@+id/textViewTotalPriceFragment"
-            android:layout_toRightOf="@id/textViewTemp2"
-            android:text="00"
+            android:id="@+id/textViewSumCartFragment"
+            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-            android:textStyle="bold"
-            android:layout_toRightOf="@id/textViewTotalPriceFragment"
             android:text="руб."
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-    </RelativeLayout>
-
-
-
+    </LinearLayout>
     <ImageButton
-        android:id="@+id/buttonBackFragment"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-
-        android:src="@drawable/ic_test"
-        android:background="@color/white"
-        android:layout_width="40dp"
-        android:layout_height="40dp"/>
-    <ImageButton
-        android:id="@+id/buttonDeleteFragment"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-
-        android:src="@drawable/ic_test"
-        android:background="@color/white"
-        android:layout_width="40dp"
-        android:layout_height="40dp"/>
-    <ImageButton
-        android:id="@+id/buttonCartFragment"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-
-        android:src="@drawable/ic_test"
-        android:background="@color/white"
-        android:layout_width="40dp"
-        android:layout_height="40dp"/>
-
-    <ImageButton
-        android:id="@+id/buttonLeftFragment"
-        android:background="@color/white"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
-
-        android:src="@drawable/ic_test"
-        android:layout_width="40dp"
-        android:layout_height="40dp"/>
-    <ImageButton
-        android:id="@+id/buttonRightFragment"
+        android:id="@+id/buttonSellCartFragment"
         android:background="@color/white"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="10dp"
 
         android:src="@drawable/ic_test"
