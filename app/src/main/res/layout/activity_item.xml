@@ -20,7 +20,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
 
-        android:src="@drawable/ic_test"
+        android:src="@drawable/ic_cart"
         android:layout_margin="16dp" />
 
 </RelativeLayout>

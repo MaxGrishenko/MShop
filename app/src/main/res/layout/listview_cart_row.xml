@@ -59,7 +59,7 @@
             <ImageButton
                 android:id="@+id/buttonSubCart"
                 android:onClick="clickChangeAmountCart"
-                android:src="@drawable/ic_test"
+                android:src="@drawable/ic_minus"
                 android:background="@color/white"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/textViewTotalCart"
@@ -77,7 +77,7 @@
             <ImageButton
                 android:id="@+id/buttonAddCart"
                 android:onClick="clickChangeAmountCart"
-                android:src="@drawable/ic_test"
+                android:src="@drawable/ic_plus"
                 android:background="@color/white"
                 android:layout_toRightOf="@+id/textViewAmountCart"
                 android:layout_below="@id/textViewTotalCart"
