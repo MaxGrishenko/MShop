@@ -1,5 +1,7 @@
 package com.bandit.mshop.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,60 +9,148 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.bandit.mshop.R;
+import com.bandit.mshop.database.DBAccess;
+import com.bandit.mshop.database.ItemModel;
+import com.mikhaellopez.circularimageview.CircularImageView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ItemFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class ItemFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    DBAccess dbAccess;
+    int price;
+    int indexItem;
+    ArrayList<Integer> idItemList;
+    SharedPreferences sPref;
+    Map<Integer, Integer> idMap = new HashMap<Integer, Integer>();
 
     public ItemFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ItemFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ItemFragment newInstance(String param1, String param2) {
-        ItemFragment fragment = new ItemFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_item, container, false);
+        View view = inflater.inflate(R.layout.fragment_item, container, false);
+
+        //sPref = this.getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        dbAccess = DBAccess.getInstance(getActivity().getApplicationContext());
+
+        indexItem = getArguments().getInt("indexItem");
+        idItemList = getArguments().getIntegerArrayList("idItemList");
+
+        final CircularImageView ciPhoto = view.findViewById(R.id.circleImageViewPhotoFragment);
+        final TextView tName = view.findViewById(R.id.textViewNameFragment);
+        final TextView tPrice = view.findViewById(R.id.textViewPriceFragment);
+        final TextView tDescription = view.findViewById(R.id.textViewDescriptionFragment);
+        final TextView tAmount = view.findViewById(R.id.textViewAmountFragment);
+        final TextView tTotalPrice = view.findViewById(R.id.textViewTotalPriceFragment);
+        setItemInfo(view, ciPhoto, tName, tPrice, tDescription, tAmount, tTotalPrice);
+
+
+        ImageButton bBack = view.findViewById(R.id.buttonBackFragment);
+        ImageButton bDelete = view.findViewById(R.id.buttonDeleteFragment);
+        ImageButton bToCart = view.findViewById(R.id.buttonCartFragment);
+        ImageButton bAdd = view.findViewById(R.id.buttonAddAmountFragment);
+        ImageButton bSub = view.findViewById(R.id.buttonSubAmountFragment);
+        ImageButton bLeft = view.findViewById(R.id.buttonLeftFragment);
+        ImageButton bRight = view.findViewById(R.id.buttonRightFragment);
+
+
+        bBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
+        bDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dbAccess.open();
+                //dbAccess.deleteItem(idItemList.get(indexItem));
+                dbAccess.close();
+                getActivity().onBackPressed();
+            }
+        });
+        bToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dbAccess.open();
+                //dbAccess.updateItem(idItemList.get(indexItem), Integer.parseInt((String) tAmount.getText()));
+                dbAccess.close();
+                getActivity().onBackPressed();
+            }
+        });
+        bAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int amount = Integer.parseInt((String) tAmount.getText());
+                if (amount != 9) {
+                    amount += 1;
+                    tAmount.setText(String.valueOf(amount));
+                    tTotalPrice.setText(String.valueOf(amount * price));
+                }
+            }
+        });
+        bSub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int amount = Integer.parseInt((String) tAmount.getText());
+                if (amount != 1) {
+                    amount -= 1;
+                    tAmount.setText(String.valueOf(amount));
+                    tTotalPrice.setText(String.valueOf(amount * price));
+                }
+            }
+        });
+        bLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int size = idItemList.size() - 1;
+                if (indexItem == 0) {
+                    indexItem = size;
+                } else indexItem -= 1;
+                setItemInfo(view, ciPhoto, tName, tPrice, tDescription, tAmount, tTotalPrice);
+            }
+        });
+        //
+        bRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (indexItem == idItemList.size() - 1) {
+                    indexItem = 0;
+                } else indexItem += 1;
+                setItemInfo(view, ciPhoto, tName, tPrice, tDescription, tAmount, tTotalPrice);
+            }
+        });
+        return view;
+    }
+
+    // По id устанавливаем товар
+    private void setItemInfo(View view, CircularImageView ciPhoto, TextView tName,
+                             TextView tPrice, TextView tDescription, TextView tAmount, TextView tTotalPrice) {
+        dbAccess.open();
+        ItemModel item = dbAccess.getItemInfo(idItemList.get(indexItem));
+        dbAccess.close();
+        price = item.getPrice();
+
+        ciPhoto.setImageBitmap(item.getImage());
+        tName.setText(item.getName());
+        tPrice.setText(String.valueOf(price));
+        tDescription.setText(item.getDescription());
+        tAmount.setText(String.valueOf(1));
+        tTotalPrice.setText(String.valueOf(price));
+
+        int idItem = idItemList.get(indexItem);
+        //setLateItems(idItem);
     }
 }

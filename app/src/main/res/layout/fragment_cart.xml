@@ -1,14 +1,207 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.CartFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.ItemFragment"
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    android:id="@+id/layoutItemFragment"
+    android:background="@color/purple_700"
+
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginBottom="80dp">
+
+    <RelativeLayout
+        android:layout_margin="10dp"
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+    </RelativeLayout>
 
-</FrameLayout>
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/circleImageViewPhotoFragment"
+        android:layout_centerHorizontal="true"
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:src="@drawable/ic_test"
+
+        app:civ_border_color="@color/purple_700"
+        app:civ_border_width="1dp"
+        app:civ_shadow="true"
+        app:civ_shadow_radius="5dp"
+        app:civ_shadow_color="@color/purple_700"/>-->
+
+    <TextView
+        android:id="@+id/textViewNameFragment"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_below="@id/circleImageViewPhotoFragment"
+
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Название" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutPriceFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_below="@id/textViewNameFragment"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Цена: "/>
+        <TextView
+            android:id="@+id/textViewPriceFragment"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00"/>
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="руб."/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewDescriptionFragment"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_below="@id/linearLayoutPriceFragment"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Бла-бла-бла-Бла-бла-бла-Бла-бла-бла-Бла-бла-бла-Бла-бла-бла-Бла-бла-бла-Бла-бла-бла" />
+
+    <RelativeLayout
+        android:id="@+id/linearLayoutAmountFragment"
+        android:layout_below="@id/textViewDescriptionFragment"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/texViewTemp1Fragment"
+            android:layout_alignParentLeft="true"
+            android:text="Количество:      "
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/textViewAmountFragment"
+            android:layout_toRightOf="@+id/texViewTemp1Fragment"
+            android:text="1"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageButton
+            android:id="@+id/buttonAddAmountFragment"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_test"
+            android:background="@color/white"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+        <ImageButton
+            android:layout_toLeftOf="@id/buttonAddAmountFragment"
+            android:id="@+id/buttonSubAmountFragment"
+            android:src="@drawable/ic_test"
+            android:background="@color/white"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_below="@id/linearLayoutAmountFragment"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/textViewTemp2"
+            android:text="Итоговая цена: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/textViewTotalPriceFragment"
+            android:layout_toRightOf="@id/textViewTemp2"
+            android:text="00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:textStyle="bold"
+            android:layout_toRightOf="@id/textViewTotalPriceFragment"
+            android:text="руб."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+
+
+    <ImageButton
+        android:id="@+id/buttonBackFragment"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+
+        android:src="@drawable/ic_test"
+        android:background="@color/white"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+    <ImageButton
+        android:id="@+id/buttonDeleteFragment"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+
+        android:src="@drawable/ic_test"
+        android:background="@color/white"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+    <ImageButton
+        android:id="@+id/buttonCartFragment"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+
+        android:src="@drawable/ic_test"
+        android:background="@color/white"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+
+    <ImageButton
+        android:id="@+id/buttonLeftFragment"
+        android:background="@color/white"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+
+        android:src="@drawable/ic_test"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+    <ImageButton
+        android:id="@+id/buttonRightFragment"
+        android:background="@color/white"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+
+        android:src="@drawable/ic_test"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+
+</RelativeLayout>
