@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.bandit.mshop.activities.CategoryActivity.APP_PREFERENCES;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -30,7 +32,6 @@ public class ItemFragment extends Fragment {
     int indexItem;
     ArrayList<Integer> idItemList;
     SharedPreferences sPref;
-    Map<Integer, Integer> idMap = new HashMap<Integer, Integer>();
 
     public ItemFragment() {
         // Required empty public constructor
@@ -42,7 +43,7 @@ public class ItemFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_item, container, false);
 
-        //sPref = this.getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        sPref = this.getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         dbAccess = DBAccess.getInstance(getActivity().getApplicationContext());
 
         indexItem = getArguments().getInt("indexItem");
@@ -85,7 +86,7 @@ public class ItemFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 dbAccess.open();
-                //dbAccess.updateItem(idItemList.get(indexItem), Integer.parseInt((String) tAmount.getText()));
+                dbAccess.updateItem(idItemList.get(indexItem), Integer.parseInt((String) tAmount.getText()));
                 dbAccess.close();
                 getActivity().onBackPressed();
             }
@@ -151,6 +152,61 @@ public class ItemFragment extends Fragment {
         tTotalPrice.setText(String.valueOf(price));
 
         int idItem = idItemList.get(indexItem);
-        //setLateItems(idItem);
+        setLateItems(idItem);
+    }
+    // G.O.V.N.O.C.O.D.E. Недавно посещённые файлы(Добавление) ====================================
+    private void setLateItems(int idItem){
+        SharedPreferences.Editor editor = sPref.edit();
+        if (sPref.contains("idItem4")){
+            if (checkDuplicate(4, idItem)){
+                editor.putInt("idItem4", sPref.getInt("idItem3", -1));
+                editor.putInt("idItem3", sPref.getInt("idItem2", -1));
+                editor.putInt("idItem2", sPref.getInt("idItem1", -1));
+                editor.putInt("idItem1", idItem);
+            }
+        }
+        else if (sPref.contains("idItem3")){
+            if (checkDuplicate(3, idItem)){
+                editor.putInt("idItem4", sPref.getInt("idItem3", -1));
+                editor.putInt("idItem3", sPref.getInt("idItem2", -1));
+                editor.putInt("idItem2", sPref.getInt("idItem1", -1));
+                editor.putInt("idItem1", idItem);
+            }
+        }
+        else if (sPref.contains("idItem2")){
+            if (checkDuplicate(2, idItem)){
+                editor.putInt("idItem3", sPref.getInt("idItem2", -1));
+                editor.putInt("idItem2", sPref.getInt("idItem1", -1));
+                editor.putInt("idItem1", idItem);
+            }
+        }
+        else if (sPref.contains("idItem1")){
+            if (checkDuplicate(1, idItem)){
+                editor.putInt("idItem2", sPref.getInt("idItem1", -1));
+                editor.putInt("idItem1", idItem);
+            }
+        }
+        else{
+            editor.putInt("idItem1", idItem);
+        }
+        editor.apply();
+    }
+
+    private boolean checkDuplicate(int size, int idItem){
+        switch (size){
+            case 1:
+                if (idItem == sPref.getInt("idItem1", -1)){ return false; }
+                break;
+            case 2:
+                if (idItem == sPref.getInt("idItem1", -1) || idItem == sPref.getInt("idItem2", -1)){ return false; }
+                break;
+            case 3:
+                if (idItem == sPref.getInt("idItem1", -1) || idItem == sPref.getInt("idItem2", -1) || idItem == sPref.getInt("idItem3", -1)){ return false; }
+                break;
+            case 4:
+                if (idItem == sPref.getInt("idItem1", -1) || idItem == sPref.getInt("idItem2", -1) || idItem == sPref.getInt("idItem3", -1) || idItem == sPref.getInt("idItem4", -1)){ return false; }
+                break;
+        }
+        return true;
     }
 }
