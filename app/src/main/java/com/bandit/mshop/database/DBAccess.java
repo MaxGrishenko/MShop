@@ -92,6 +92,14 @@ public class DBAccess {
         }
         return bitmapList;
     }
+    // Получение модели для отображения во фрагменте
+    public ItemModel getItemInfo(int id){
+        c = db.rawQuery("select * from " + TABLE_ITEM + " where " + COLUMN_ID + " like ?", new String[]{String.valueOf(id)}, null );
+        c.moveToFirst();
+        byte[] byteImage = c.getBlob(3);
+        Bitmap bitmapImage = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+        return new ItemModel(c.getString(2), bitmapImage, c.getString(4), c.getInt(5));
+    }
 
 
     // Работа с подключениями
