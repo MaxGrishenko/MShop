@@ -6,6 +6,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -17,10 +21,12 @@ import com.bandit.mshop.database.DBAccess;
 import com.bandit.mshop.fragments.CartFragment;
 import com.bandit.mshop.fragments.HelpFragment;
 import com.bandit.mshop.fragments.ItemFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class ItemActivity extends AppCompatActivity {
+    private static final String TAG = "ItemActivity";
     DBAccess dbAccess;
     ItemListAdapter itemAdapter;
     ListView listViewItem;
@@ -33,14 +39,14 @@ public class ItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
+        Log.d(TAG,"onCreate");
 
         dbAccess = DBAccess.getInstance(getApplicationContext());
-
-        dbAccess.open();
 
         Bundle args = getIntent().getExtras();
         int idCategory = args.getInt("idCategory");
 
+        dbAccess.open();
         ItemAdapterModel itemAdapterModel = dbAccess.getItemAdapterModel(idCategory);
         itemAdapter = new ItemListAdapter(this, itemAdapterModel);
         listViewItem = findViewById(R.id.listViewItem);
@@ -64,6 +70,14 @@ public class ItemActivity extends AppCompatActivity {
 
                 fragmentManager=getSupportFragmentManager();
                 changeFragment("item", R.id.containerItem, bundle);
+            }
+        });
+
+        FloatingActionButton fab = findViewById(R.id.buttonCartItem);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeFragment("cart", R.id.containerItem, null);
             }
         });
     }
@@ -126,5 +140,64 @@ public class ItemActivity extends AppCompatActivity {
             removeFragment(R.id.containerItem);
         }
     }
-    // =============================================================================================
+    // ToolBar menu ================================================================================
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.item_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_help:
+                changeFragment("help", R.id.containerItem, null);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    // Отслеживание жизненного цикла CategoryActivity ==============================================
+    @Override
+    public void onStart(){
+        super.onStart();
+        Log.d(TAG, "onStart");
+    };
+    @Override
+    public void onRestoreInstanceState(Bundle saveInstanceState){
+        super.onRestoreInstanceState(saveInstanceState);
+        Log.d(TAG, "onRestoreInstanceState");
+    };
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        Log.d(TAG, "onRestart");
+    };
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.d(TAG, "onResume");
+    };
+    @Override
+    public void onPause(){
+        super.onPause();
+        Log.d(TAG, "onPause");
+    };
+    @Override
+    protected void onSaveInstanceState(Bundle saveInstanceState){
+        super.onSaveInstanceState(saveInstanceState);
+        Log.d(TAG, "onSaveInstanceState");
+    };
+    @Override
+    public void onStop(){
+        super.onStop();
+        Log.d(TAG, "onStop");
+    };
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        Log.d(TAG, "onDestroy");
+    };
+    //==============================================================================================
 }
