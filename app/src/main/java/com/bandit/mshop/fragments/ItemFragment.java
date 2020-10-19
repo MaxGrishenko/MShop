@@ -1,5 +1,6 @@
 package com.bandit.mshop.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -55,30 +56,19 @@ public class ItemFragment extends Fragment {
         final TextView tDescription = view.findViewById(R.id.textViewDescriptionFragment);
         final TextView tAmount = view.findViewById(R.id.textViewAmountFragment);
         final TextView tTotalPrice = view.findViewById(R.id.textViewTotalPriceFragment);
-        setItemInfo(view, ciPhoto, tName, tPrice, tDescription, tAmount, tTotalPrice);
-
+        final ImageButton bDelete = view.findViewById(R.id.buttonDeleteFragment);
+        setItemInfo(view, ciPhoto, tName, tPrice, tDescription, tAmount, tTotalPrice, bDelete);
 
         ImageButton bBack = view.findViewById(R.id.buttonBackFragment);
-        ImageButton bDelete = view.findViewById(R.id.buttonDeleteFragment);
         ImageButton bToCart = view.findViewById(R.id.buttonCartFragment);
         ImageButton bAdd = view.findViewById(R.id.buttonAddAmountFragment);
         ImageButton bSub = view.findViewById(R.id.buttonSubAmountFragment);
         ImageButton bLeft = view.findViewById(R.id.buttonLeftFragment);
         ImageButton bRight = view.findViewById(R.id.buttonRightFragment);
 
-
         bBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().onBackPressed();
-            }
-        });
-        bDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dbAccess.open();
-                //dbAccess.deleteItem(idItemList.get(indexItem));
-                dbAccess.close();
                 getActivity().onBackPressed();
             }
         });
@@ -120,7 +110,7 @@ public class ItemFragment extends Fragment {
                 if (indexItem == 0) {
                     indexItem = size;
                 } else indexItem -= 1;
-                setItemInfo(view, ciPhoto, tName, tPrice, tDescription, tAmount, tTotalPrice);
+                setItemInfo(view, ciPhoto, tName, tPrice, tDescription, tAmount, tTotalPrice, bDelete);
             }
         });
         //
@@ -130,7 +120,7 @@ public class ItemFragment extends Fragment {
                 if (indexItem == idItemList.size() - 1) {
                     indexItem = 0;
                 } else indexItem += 1;
-                setItemInfo(view, ciPhoto, tName, tPrice, tDescription, tAmount, tTotalPrice);
+                setItemInfo(view, ciPhoto, tName, tPrice, tDescription, tAmount, tTotalPrice, bDelete);
             }
         });
         return view;
@@ -138,9 +128,10 @@ public class ItemFragment extends Fragment {
 
     // По id устанавливаем товар
     private void setItemInfo(View view, CircularImageView ciPhoto, TextView tName,
-                             TextView tPrice, TextView tDescription, TextView tAmount, TextView tTotalPrice) {
+                             TextView tPrice, TextView tDescription, TextView tAmount, TextView tTotalPrice, ImageButton bDelete) {
         dbAccess.open();
         ItemModel item = dbAccess.getItemInfo(idItemList.get(indexItem));
+        bDelete.setTag(item.getId());
         dbAccess.close();
         price = item.getPrice();
 

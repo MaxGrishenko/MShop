@@ -164,6 +164,7 @@
         android:layout_height="40dp"/>
     <ImageButton
         android:id="@+id/buttonDeleteFragment"
+        android:onClick="buttonDelete"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp"

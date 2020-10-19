@@ -3,18 +3,23 @@ package com.bandit.mshop.database;
 import android.graphics.Bitmap;
 
 public class ItemModel {
+    private int id;
     private String name;
     private Bitmap image;
     private String description;
     private int price;
 
-    public ItemModel(String name, Bitmap image, String description, int price){
+    public ItemModel(int id, String name, Bitmap image, String description, int price){
+        this.id = id;
         this.name = name;
         this.image = image;
         this.description = description;
         this.price = price;
     }
 
+    public int getId() {
+        return id;
+    }
     public String getName() {
         return name;
     }

@@ -100,7 +100,7 @@ public class DBAccess {
         c.moveToFirst();
         byte[] byteImage = c.getBlob(3);
         Bitmap bitmapImage = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
-        return new ItemModel(c.getString(2), bitmapImage, c.getString(4), c.getInt(5));
+        return new ItemModel(c.getInt(0),c.getString(2), bitmapImage, c.getString(4), c.getInt(5));
     }
     // Получение bitmap по id
     public Bitmap getItemImage(int id){

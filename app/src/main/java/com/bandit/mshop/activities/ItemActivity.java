@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bandit.mshop.R;
 import com.bandit.mshop.adapters.ItemAdapterModel;
@@ -30,6 +31,7 @@ public class ItemActivity extends AppCompatActivity {
     DBAccess dbAccess;
     ItemListAdapter itemAdapter;
     ListView listViewItem;
+    int idCategory;
 
     FragmentTransaction fragmentTransaction;
     FragmentManager fragmentManager;
@@ -44,7 +46,7 @@ public class ItemActivity extends AppCompatActivity {
         dbAccess = DBAccess.getInstance(getApplicationContext());
 
         Bundle args = getIntent().getExtras();
-        int idCategory = args.getInt("idCategory");
+        idCategory = args.getInt("idCategory");
 
         dbAccess.open();
         ItemAdapterModel itemAdapterModel = dbAccess.getItemAdapterModel(idCategory);
@@ -81,6 +83,19 @@ public class ItemActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void buttonDelete(View view){
+        onBackPressed();
+        dbAccess.open();
+        dbAccess.deleteItem((int) view.getTag());
+        ItemAdapterModel itemAdapterModel = dbAccess.getItemAdapterModel(idCategory);
+        itemAdapter = new ItemListAdapter(this, itemAdapterModel);
+        listViewItem = findViewById(R.id.listViewItem);
+        listViewItem.setAdapter(itemAdapter);
+        //TODO убирать late items
+        dbAccess.close();
+    }
+
 
     // Fragment work ===============================================================================
     private void changeFragment(String fragmentType, int fragmentContainer, Bundle data){
