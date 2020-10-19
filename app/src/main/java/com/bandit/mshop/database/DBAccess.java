@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.bandit.mshop.adapters.CategoryAdapterModel;
+import com.bandit.mshop.adapters.ItemAdapterModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,35 @@ public class DBAccess {
         Bitmap[] image = bitList.toArray(new Bitmap[size]);
 
         return new CategoryAdapterModel(id, name, image);
+    }
+    // Для отображение предметов в ListView по категориям
+    public ItemAdapterModel getItemAdapterModel(int idCategory){
+        List<Integer> idList = new ArrayList<Integer>();
+        List<String> nameList = new ArrayList<String>();
+        List<Integer> priceList = new ArrayList<>();
+        List<byte[]> imageList = new ArrayList<>();
+
+        if (idCategory == 1){
+            c = db.rawQuery("select * from " + TABLE_ITEM, null);
+        }
+        else c = db.rawQuery("select * from " + TABLE_ITEM + " where " + COLUMN_CATEGORY_ID + " like ?", new String[]{String.valueOf(idCategory)}, null );
+        if (c.moveToFirst()){
+            do{
+                idList.add(c.getInt(0)) ;
+                nameList.add(c.getString(2));
+                priceList.add(c.getInt(5));
+                imageList.add(c.getBlob(3));
+            } while (c.moveToNext());
+        }
+
+        int size = nameList.size();
+        Integer[] id = idList.toArray(new Integer[size]);
+        String[] name = nameList.toArray(new String[size]);
+        Integer[] price = priceList.toArray(new Integer[size]);
+        List<Bitmap> bitList = ByteToBitmap(imageList); //List<Byte[]> -> List<Bitmap> -> Bitmap[]
+        Bitmap[] image = bitList.toArray(new Bitmap[size]);
+
+        return new ItemAdapterModel(id, name, price, image);
     }
     // Конвертация List<byte[]> в List<Bitmap>
     private List<Bitmap> ByteToBitmap(List<byte[]> byteList){
