@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bandit.mshop.R;
 import com.bandit.mshop.database.DBAccess;
@@ -78,6 +79,7 @@ public class ItemFragment extends Fragment {
                 dbAccess.open();
                 dbAccess.updateItem(idItemList.get(indexItem), Integer.parseInt((String) tAmount.getText()));
                 dbAccess.close();
+                Toast.makeText(getActivity(),"Товар добавлен в корзину!", Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             }
         });
@@ -113,7 +115,6 @@ public class ItemFragment extends Fragment {
                 setItemInfo(view, ciPhoto, tName, tPrice, tDescription, tAmount, tTotalPrice, bDelete);
             }
         });
-        //
         bRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,7 +127,7 @@ public class ItemFragment extends Fragment {
         return view;
     }
 
-    // По id устанавливаем товар
+    // From id get item
     private void setItemInfo(View view, CircularImageView ciPhoto, TextView tName,
                              TextView tPrice, TextView tDescription, TextView tAmount, TextView tTotalPrice, ImageButton bDelete) {
         dbAccess.open();
@@ -145,7 +146,8 @@ public class ItemFragment extends Fragment {
         int idItem = idItemList.get(indexItem);
         setLateItems(idItem);
     }
-    // G.O.V.N.O.C.O.D.E. Недавно посещённые файлы(Добавление) ====================================
+
+    // LateItems work ==============================================================================
     private void setLateItems(int idItem){
         SharedPreferences.Editor editor = sPref.edit();
         if (sPref.contains("idItem4")){
@@ -182,7 +184,6 @@ public class ItemFragment extends Fragment {
         }
         editor.apply();
     }
-
     private boolean checkDuplicate(int size, int idItem){
         switch (size){
             case 1:
@@ -200,4 +201,5 @@ public class ItemFragment extends Fragment {
         }
         return true;
     }
+    //==============================================================================================
 }

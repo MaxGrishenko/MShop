@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bandit.mshop.R;
@@ -22,15 +26,20 @@ import com.bandit.mshop.database.DBAccess;
 import com.bandit.mshop.fragments.CartFragment;
 import com.bandit.mshop.fragments.HelpFragment;
 import com.bandit.mshop.fragments.ItemFragment;
+import com.bandit.mshop.others.LateItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.bandit.mshop.activities.CategoryActivity.APP_PREFERENCES;
 
 public class ItemActivity extends AppCompatActivity {
     private static final String TAG = "ItemActivity";
     DBAccess dbAccess;
     ItemListAdapter itemAdapter;
     ListView listViewItem;
+    SharedPreferences sPref;
     int idCategory;
 
     FragmentTransaction fragmentTransaction;
@@ -58,7 +67,7 @@ public class ItemActivity extends AppCompatActivity {
         listViewItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // Закидываем во ItemFragment список id товаров
+                // Create list of item id
                 Integer idItemCurrent = (Integer) itemAdapter.getItem(i);
                 ArrayList<Integer> idItemList = new ArrayList<>();
 
@@ -79,11 +88,59 @@ public class ItemActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fragmentManager=getSupportFragmentManager();
                 changeFragment("cart", R.id.containerItem, null);
             }
         });
     }
 
+    // Button clicks for CartFragment ==============================================================
+    public void clickChangeAmountCart(View view){
+        RelativeLayout parentRow = (RelativeLayout) view.getParent();
+        TextView textViewAmount = (TextView) parentRow.findViewById(R.id.textViewAmountCart);
+        TextView textViewPrice = (TextView) parentRow.findViewById(R.id.textViewPriceCart);
+        TextView textViewTotal = (TextView) parentRow.findViewById(R.id.textViewTotalCart);
+        TextView textViewSum = (TextView) findViewById(R.id.textViewSumCartFragment);
+
+        Integer amount = Integer.parseInt((String)textViewAmount.getText());
+        Integer sum = Integer.parseInt((String) textViewSum.getText());
+        Integer price = Integer.parseInt((String)textViewPrice.getText());
+
+        switch (view.getId()){
+            case R.id.buttonAddCart:
+                if (amount != 9){
+                    amount++;
+                    textViewSum.setText(String.valueOf(sum + price));
+                }
+                else return;
+                break;
+            case R.id.buttonSubCart:
+                if (amount != 1){
+                    amount--;
+                    textViewSum.setText(String.valueOf(sum - price));
+                }
+                else return;
+                break;
+        }
+        dbAccess.open();
+        dbAccess.updateItem((int) view.getTag(), amount);
+        dbAccess.close();
+        textViewAmount.setText(String.valueOf(amount));
+        textViewTotal.setText(String.valueOf(amount * price));
+    }
+    public void clickDeleteCart(View view){
+        int id = (int) view.getTag();
+        onBackPressed();
+        dbAccess.open();
+        dbAccess.updateItem(id, 0);
+        dbAccess.close();
+        fragmentManager=getSupportFragmentManager();
+        Toast.makeText(this,"Товар убран из корзины!", Toast.LENGTH_SHORT).show();
+        changeFragment("cart", R.id.containerItem, null);
+    }
+    //==============================================================================================
+
+    // Button clicks for CartFragment ==============================================================
     public void buttonDelete(View view){
         onBackPressed();
         dbAccess.open();
@@ -92,10 +149,26 @@ public class ItemActivity extends AppCompatActivity {
         itemAdapter = new ItemListAdapter(this, itemAdapterModel);
         listViewItem = findViewById(R.id.listViewItem);
         listViewItem.setAdapter(itemAdapter);
-        //TODO убирать late items
         dbAccess.close();
+        deleteLateItems((int) view.getTag());
     }
-
+    private void deleteLateItems(int id){
+        sPref = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        List<Integer> idList = new ArrayList<>();
+        for (int i = 4; i > 0; i--){
+            String item = "idItem" + String.valueOf(i);
+            if (sPref.contains(item)){
+                if (sPref.getInt(item, -1) != id){
+                    idList.add(sPref.getInt(item,-1));
+                }
+            }
+        }
+        sPref.edit().clear().commit();
+        for (int idItem: idList) {
+            LateItem.setLateItems(idItem, sPref);
+        }
+    }
+    //==============================================================================================
 
     // Fragment work ===============================================================================
     private void changeFragment(String fragmentType, int fragmentContainer, Bundle data){
@@ -136,7 +209,6 @@ public class ItemActivity extends AppCompatActivity {
         fragmentTransaction.add(fragmentContainer, fragment);
         fragmentTransaction.commit();
     }
-
     private void removeFragment(int fragmentContainer){
         isFragmentActive = false;
         listViewItem.setEnabled(true);
@@ -145,7 +217,6 @@ public class ItemActivity extends AppCompatActivity {
         fragmentTransaction.remove(fragment);
         fragmentTransaction.commit();
     }
-
     @Override
     public void onBackPressed() {
         if (!isFragmentActive){
@@ -155,6 +226,8 @@ public class ItemActivity extends AppCompatActivity {
             removeFragment(R.id.containerItem);
         }
     }
+    //==============================================================================================
+
     // ToolBar menu ================================================================================
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -173,7 +246,9 @@ public class ItemActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    // Отслеживание жизненного цикла CategoryActivity ==============================================
+    //==============================================================================================
+
+    // CategoryActivity lifecycle ==================================================================
     @Override
     public void onStart(){
         super.onStart();

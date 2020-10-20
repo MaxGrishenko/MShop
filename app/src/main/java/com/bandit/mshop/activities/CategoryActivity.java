@@ -19,18 +19,23 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bandit.mshop.R;
 import com.bandit.mshop.adapters.CategoryAdapterModel;
 import com.bandit.mshop.adapters.CategoryListAdapter;
+import com.bandit.mshop.adapters.ItemAdapterModel;
+import com.bandit.mshop.adapters.ItemListAdapter;
 import com.bandit.mshop.database.DBAccess;
 import com.bandit.mshop.fragments.CartFragment;
 import com.bandit.mshop.fragments.HelpFragment;
 import com.bandit.mshop.fragments.ItemFragment;
+import com.bandit.mshop.others.LateItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryActivity extends AppCompatActivity {
     private static final String TAG = "CategoryActivity";
@@ -81,11 +86,14 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });
     }
+    // Start new activity with right category
     private void showCategoryItems(int idCategory){
         Intent intent = new Intent(this, ItemActivity.class);
         intent.putExtra("idCategory", idCategory);
         startActivity(intent);
     }
+
+    // Button clicks for CartFragment ==============================================================
     public void clickChangeAmountCart(View view){
         RelativeLayout parentRow = (RelativeLayout) view.getParent();
         TextView textViewAmount = (TextView) parentRow.findViewById(R.id.textViewAmountCart);
@@ -113,17 +121,56 @@ public class CategoryActivity extends AppCompatActivity {
                 else return;
                 break;
         }
+        dbAccess.open();
+        dbAccess.updateItem((int) view.getTag(), amount);
+        dbAccess.close();
         textViewAmount.setText(String.valueOf(amount));
         textViewTotal.setText(String.valueOf(amount * price));
     }
-    /*
-    public void clickRemoveCart(View view){
-        CartAdapterModel opa = dbHelper.getCart();
-        Integer[] zigota = opa.getId();
-        dbHelper.updateItem(zigota[0], 0, 1);
+    public void clickDeleteCart(View view){
+        int id = (int) view.getTag();
+        onBackPressed();
+        dbAccess.open();
+        dbAccess.updateItem(id, 0);
+        dbAccess.close();
+        fragmentManager=getSupportFragmentManager();
+        Toast.makeText(this,"Товар убран из корзины!", Toast.LENGTH_SHORT).show();
+        changeFragment("cart", R.id.containerCategory, null);
     }
-    */
-    // G.O.V.N.O.C.O.D.E. Недавно посещённые файлы(отображение) ====================================
+    //==============================================================================================
+
+    // Remove from DB and update LateItems =========================================================
+    public void buttonDelete(View view){
+        onBackPressed();
+        dbAccess.open();
+        dbAccess.deleteItem((int) view.getTag());
+        CategoryAdapterModel categoryAdapterModel = dbAccess.getCategoryAdapterModel();
+        categoryAdapter = new CategoryListAdapter(this, categoryAdapterModel);
+        listViewCategory = findViewById(R.id.listViewCategory);
+        listViewCategory.setAdapter(categoryAdapter);
+        dbAccess.close();
+        deleteLateItems((int) view.getTag());
+        setLateItems();
+    }
+    private void deleteLateItems(int id){
+        sPref = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        List<Integer> idList = new ArrayList<>();
+        for (int i = 4; i > 0; i--){
+            String item = "idItem" + String.valueOf(i);
+            if (sPref.contains(item)){
+                if (sPref.getInt(item, -1) != id){
+                    idList.add(sPref.getInt(item,-1));
+                }
+            }
+        }
+        sPref.edit().clear().commit();
+        for (int idItem: idList) {
+            LateItem.setLateItems(idItem, sPref);
+        }
+    }
+    //==============================================================================================
+
+    // LateItems work ==============================================================================
     private void setLateItems(){
         l1 = findViewById(R.id.lineaLayoutLate);
         ci1 = findViewById(R.id.ciLate1);
@@ -219,6 +266,7 @@ public class CategoryActivity extends AppCompatActivity {
         changeFragment("item", R.id.containerCategory, bundle);
 
     }
+    //==============================================================================================
 
     // Fragment work ===============================================================================
     private void changeFragment(String fragmentType, int fragmentContainer, Bundle data){
@@ -260,7 +308,6 @@ public class CategoryActivity extends AppCompatActivity {
         fragmentTransaction.add(fragmentContainer, fragment);
         fragmentTransaction.commit();
     }
-
     private void removeFragment(int fragmentContainer){
         isFragmentActive = false;
         listViewCategory.setEnabled(true);
@@ -269,7 +316,6 @@ public class CategoryActivity extends AppCompatActivity {
         fragmentTransaction.remove(fragment);
         fragmentTransaction.commit();
     }
-
     @Override
     public void onBackPressed() {
         if (!isFragmentActive){
@@ -280,6 +326,7 @@ public class CategoryActivity extends AppCompatActivity {
             setLateItems();
         }
     }
+    //==============================================================================================
 
     // ToolBar menu ================================================================================
     @Override
@@ -288,7 +335,6 @@ public class CategoryActivity extends AppCompatActivity {
         inflater.inflate(R.menu.category_menu, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -303,7 +349,9 @@ public class CategoryActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    // Отслеживание жизненного цикла CategoryActivity ==============================================
+    //==============================================================================================
+
+    // CategoryActivity lifecycle ==================================================================
     @Override
     public void onStart(){
         super.onStart();
@@ -345,4 +393,5 @@ public class CategoryActivity extends AppCompatActivity {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
     };
+    //==============================================================================================
 }

@@ -11,18 +11,22 @@
         android:layout_height="match_parent">
         <TextView
             android:text="Товар:"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
             android:text="Штука:"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
             android:text="Итого:"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
             android:text="Кол-во:"
+            android:textStyle="bold"
             android:gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
@@ -38,6 +42,7 @@
             <TextView
                 android:id="@+id/textViewNameCart"
                 android:text="Тестовое название"
+                android:textStyle="italic"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_width="wrap_content"
@@ -69,6 +74,10 @@
             <TextView
                 android:id="@+id/textViewAmountCart"
                 android:text="1"
+                android:textSize="20dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textStyle="bold"
                 android:gravity="center_vertical"
                 android:layout_toRightOf="@+id/buttonSubCart"
                 android:layout_below="@id/textViewTotalCart"
@@ -80,6 +89,16 @@
                 android:src="@drawable/ic_plus"
                 android:background="@color/white"
                 android:layout_toRightOf="@+id/textViewAmountCart"
+                android:layout_below="@id/textViewTotalCart"
+                android:focusable="false"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
+            <ImageButton
+                android:id="@+id/buttonRemoveCart"
+                android:src="@drawable/ic_remove_cart"
+                android:onClick="clickDeleteCart"
+                android:background="@color/white"
+                android:layout_alignParentRight="true"
                 android:layout_below="@id/textViewTotalCart"
                 android:focusable="false"
                 android:layout_width="40dp"

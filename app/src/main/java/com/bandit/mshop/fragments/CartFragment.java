@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bandit.mshop.R;
 import com.bandit.mshop.adapters.CartAdapterModel;
@@ -20,14 +21,11 @@ import com.bandit.mshop.database.DBAccess;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CartFragment extends Fragment {
-
+public class    CartFragment extends Fragment {
     CartListAdapter cartAdapter;
     ListView listViewCart;
     DBAccess dbAccess;
     Integer[] cartItemId;
-
-
 
     public CartFragment() {
         // Required empty public constructor
@@ -39,8 +37,6 @@ public class CartFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
 
         dbAccess = DBAccess.getInstance(getActivity().getApplicationContext());
-
-
 
         dbAccess.open();
         CartAdapterModel cartAdapterModel = dbAccess.getCartAdapterModel();
@@ -66,6 +62,7 @@ public class CartFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                getActivity().onBackPressed();
             }
         });
 
@@ -83,8 +80,9 @@ public class CartFragment extends Fragment {
             public void onClick(View view) {
                 if (cartItemId != null){
                     dbAccess.open();
-                    //dbAccess.sellItems(cartItemId);
+                    dbAccess.sellItems(cartItemId);
                     dbAccess.close();
+                    Toast.makeText(getActivity(),"Продано!", Toast.LENGTH_SHORT).show();
                 }
                 getActivity().onBackPressed();
             }
