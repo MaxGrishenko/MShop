@@ -22,6 +22,9 @@
             android:name=".activities.ItemActivity"
             android:label="Товары">
         </activity>
+        <activity
+            android:name=".activities.PriceListActivity"
+            android:label="Прейскурант">
+        </activity>
     </application>
-
 </manifest>

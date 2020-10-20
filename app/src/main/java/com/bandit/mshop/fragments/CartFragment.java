@@ -78,11 +78,14 @@ public class    CartFragment extends Fragment {
         bSell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (cartItemId != null){
+                if (cartItemId.length != 0){
                     dbAccess.open();
                     dbAccess.sellItems(cartItemId);
                     dbAccess.close();
                     Toast.makeText(getActivity(),"Продано!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getActivity(),"Корзина пуста!", Toast.LENGTH_SHORT).show();
                 }
                 getActivity().onBackPressed();
             }

@@ -6,15 +6,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.bandit.mshop.adapters.CartAdapterModel;
 import com.bandit.mshop.adapters.CategoryAdapterModel;
 import com.bandit.mshop.adapters.ItemAdapterModel;
+import com.bandit.mshop.adapters.PriceAdapterModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DBAccess {
+    private static final String TAG = "DBWork";
     private DBHelper openHelper;
     private SQLiteDatabase db;
     private static DBAccess instance;
@@ -51,6 +54,7 @@ public class DBAccess {
         List<Bitmap> bitList = ByteToBitmap(imageList); //List<Byte[]> -> List<Bitmap> -> Bitmap[]
         Bitmap[] image = bitList.toArray(new Bitmap[size]);
 
+        Log.d(TAG, "Get CategoryAdapterModel for ListView");
         return new CategoryAdapterModel(id, name, image);
     }
     public ItemAdapterModel getItemAdapterModel(int idCategory){
@@ -79,6 +83,7 @@ public class DBAccess {
         List<Bitmap> bitList = ByteToBitmap(imageList); //List<Byte[]> -> List<Bitmap> -> Bitmap[]
         Bitmap[] image = bitList.toArray(new Bitmap[size]);
 
+        Log.d(TAG, "Get ItemAdapterModel for ListView");
         return new ItemAdapterModel(id, name, price, image);
     }
     private List<Bitmap> ByteToBitmap(List<byte[]> byteList){
@@ -93,6 +98,8 @@ public class DBAccess {
         c.moveToFirst();
         byte[] byteImage = c.getBlob(3);
         Bitmap bitmapImage = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+
+        Log.d(TAG, "Get ItemModel by id-> " + String.valueOf(id));
         return new ItemModel(c.getInt(0),c.getString(2), bitmapImage, c.getString(4), c.getInt(5));
     }
     public Bitmap getItemImage(int id){
@@ -123,11 +130,14 @@ public class DBAccess {
         Integer[] price = priceList.toArray(new Integer[size]);
         Integer[] amount = amountList.toArray(new Integer[size]);
 
+
+        Log.d(TAG, "Get CartAdapterModel for ListView");
         return new CartAdapterModel(id,name, price, amount);
     }
     public void updateItem(int id, int amount){
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_AMOUNT, amount);
+        Log.d(TAG, "Update Item by id-> " + String.valueOf(id));
         db.update(TABLE_ITEM, cv, COLUMN_ID + "= ?", new String[] {String.valueOf(id)});
     }
     public void sellItems(Integer[] cartItemId) {
@@ -136,8 +146,35 @@ public class DBAccess {
         }
     }
     public void deleteItem(int id) {
+        Log.d(TAG, "Delete Item by id-> " + String.valueOf(id));
         db.delete(TABLE_ITEM, COLUMN_ID + "= ?", new String[] {String.valueOf(id)});
     }
+    public PriceAdapterModel getPriceListModel(){
+        c = db.rawQuery("select * from item inner join category on item.categoryId = category.id" , null );
+        List<Integer> idItemList = new ArrayList<>();
+        List<String> categoryNameList = new ArrayList<>();
+        List<String> itemNameList = new ArrayList<>();
+        List<Integer> itemPriceList = new ArrayList<>();
+
+        if (c.moveToFirst()){
+            do{
+                idItemList.add(c.getInt(0));
+                categoryNameList.add(c.getString(9));
+                itemNameList.add(c.getString(2));
+                itemPriceList.add(c.getInt(5));
+            } while (c.moveToNext());
+        }
+
+        int size = idItemList.size();
+        Integer[] idItem = idItemList.toArray(new Integer[size]);
+        String[] categoryName = categoryNameList.toArray(new String[size]);
+        String[] itemName = itemNameList.toArray(new String[size]);
+        Integer[] itemPrice = itemPriceList.toArray(new Integer[size]);
+
+        Log.d(TAG, "Get PriceAdapterModel for ListView");
+        return new PriceAdapterModel(idItem, categoryName, itemName, itemPrice);
+    }
+
 
     private DBAccess(Context context){
         this.openHelper=new DBHelper(context);

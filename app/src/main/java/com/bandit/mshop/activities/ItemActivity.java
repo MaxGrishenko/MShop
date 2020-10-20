@@ -145,6 +145,7 @@ public class ItemActivity extends AppCompatActivity {
         onBackPressed();
         dbAccess.open();
         dbAccess.deleteItem((int) view.getTag());
+        Toast.makeText(this,"Товар удалён из БД!", Toast.LENGTH_SHORT).show();
         ItemAdapterModel itemAdapterModel = dbAccess.getItemAdapterModel(idCategory);
         itemAdapter = new ItemListAdapter(this, itemAdapterModel);
         listViewItem = findViewById(R.id.listViewItem);
@@ -248,7 +249,7 @@ public class ItemActivity extends AppCompatActivity {
     }
     //==============================================================================================
 
-    // CategoryActivity lifecycle ==================================================================
+    // ItemActivity lifecycle ==================================================================
     @Override
     public void onStart(){
         super.onStart();

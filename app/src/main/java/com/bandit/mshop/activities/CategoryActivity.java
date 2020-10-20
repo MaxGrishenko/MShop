@@ -59,6 +59,7 @@ public class CategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
+        Log.d(TAG,"onCreate");
 
         dbAccess = DBAccess.getInstance(getApplicationContext());
 
@@ -144,6 +145,7 @@ public class CategoryActivity extends AppCompatActivity {
         onBackPressed();
         dbAccess.open();
         dbAccess.deleteItem((int) view.getTag());
+        Toast.makeText(this,"Товар удалён из БД!", Toast.LENGTH_SHORT).show();
         CategoryAdapterModel categoryAdapterModel = dbAccess.getCategoryAdapterModel();
         categoryAdapter = new CategoryListAdapter(this, categoryAdapterModel);
         listViewCategory = findViewById(R.id.listViewCategory);
@@ -343,7 +345,8 @@ public class CategoryActivity extends AppCompatActivity {
                 changeFragment("help", R.id.containerCategory, null);
                 return true;
             case R.id.item_price_list:
-                // TODO INNER JOIN на новой Activity
+                Intent intent = new Intent(this, PriceListActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
