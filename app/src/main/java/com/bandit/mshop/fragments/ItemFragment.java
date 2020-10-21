@@ -7,7 +7,10 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 import com.bandit.mshop.R;
 import com.bandit.mshop.database.DBAccess;
 import com.bandit.mshop.database.ItemModel;
+import com.bandit.mshop.others.OnScaleTouchListener;
 import com.bandit.mshop.others.OnSwipeTouchListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -31,7 +35,10 @@ import static com.bandit.mshop.activities.CategoryActivity.APP_PREFERENCES;
  * A simple {@link Fragment} subclass.
  */
 public class ItemFragment extends Fragment {
+    private static final String TAG = "Gest";
     DBAccess dbAccess;
+    private ScaleGestureDetector mScaleGestureDetector;
+    private float mScaleFactor = 1.0f;
     int price;
     int indexItem;
     ArrayList<Integer> idItemList;
@@ -61,6 +68,7 @@ public class ItemFragment extends Fragment {
         final TextView tTotalPrice = view.findViewById(R.id.textViewTotalPriceFragment);
         final ImageButton bDelete = view.findViewById(R.id.buttonDeleteFragment);
         setItemInfo(view, ciPhoto, tName, tPrice, tDescription, tAmount, tTotalPrice, bDelete);
+
 
         ImageButton bBack = view.findViewById(R.id.buttonBackFragment);
         ImageButton bToCart = view.findViewById(R.id.buttonCartFragment);
@@ -127,7 +135,8 @@ public class ItemFragment extends Fragment {
             }
         });
         final RelativeLayout rlGest = view.findViewById(R.id.rlGest);
-        rlGest.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
+        rlGest.setOnTouchListener(new OnScaleTouchListener(getContext()));
+/*        rlGest.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             public void onSwipeTop() {
                 bBack.performClick();
             }
@@ -141,7 +150,7 @@ public class ItemFragment extends Fragment {
                 bToCart.performClick();
             }
 
-        });
+        });*/
         return view;
     }
 
