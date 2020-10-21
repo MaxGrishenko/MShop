@@ -1,22 +1,27 @@
 package com.bandit.mshop.fragments;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bandit.mshop.R;
+import com.bandit.mshop.activities.CategoryActivity;
 import com.bandit.mshop.adapters.CartAdapterModel;
 import com.bandit.mshop.adapters.CartListAdapter;
 import com.bandit.mshop.database.DBAccess;
+import com.bandit.mshop.others.OnSwipeTouchListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,6 +87,9 @@ public class    CartFragment extends Fragment {
                     dbAccess.open();
                     dbAccess.sellItems(cartItemId);
                     dbAccess.close();
+                    final MediaPlayer mp = MediaPlayer.create(getActivity(), R.raw.s_sell);
+                    mp.start();
+
                     Toast.makeText(getActivity(),"Продано!", Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -90,6 +98,23 @@ public class    CartFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+
+        final ListView lvGest = view.findViewById(R.id.listViewCart);
+        lvGest.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
+            public void onSwipeTop() {
+                bBack.performClick();
+            }
+            public void onSwipeRight() {
+            }
+            public void onSwipeLeft() {
+            }
+            public void onSwipeBottom() {
+                bSell.performClick();
+            }
+
+        });
+        
         return view;
     }
+
 }

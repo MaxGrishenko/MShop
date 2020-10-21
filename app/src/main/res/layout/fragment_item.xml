@@ -15,6 +15,7 @@
     android:layout_marginBottom="80dp">
 
     <RelativeLayout
+        android:id="@+id/rlGest"
         android:layout_margin="10dp"
         android:background="@color/white"
         android:layout_width="match_parent"

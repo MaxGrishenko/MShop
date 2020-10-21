@@ -11,12 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bandit.mshop.R;
 import com.bandit.mshop.database.DBAccess;
 import com.bandit.mshop.database.ItemModel;
+import com.bandit.mshop.others.OnSwipeTouchListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
@@ -123,6 +125,22 @@ public class ItemFragment extends Fragment {
                 } else indexItem += 1;
                 setItemInfo(view, ciPhoto, tName, tPrice, tDescription, tAmount, tTotalPrice, bDelete);
             }
+        });
+        final RelativeLayout rlGest = view.findViewById(R.id.rlGest);
+        rlGest.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
+            public void onSwipeTop() {
+                bBack.performClick();
+            }
+            public void onSwipeRight() {
+                bLeft.performClick();
+            }
+            public void onSwipeLeft() {
+                bRight.performClick();
+            }
+            public void onSwipeBottom() {
+                bToCart.performClick();
+            }
+
         });
         return view;
     }

@@ -1,6 +1,7 @@
 package com.bandit.mshop.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MotionEventCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -9,12 +10,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -60,6 +64,21 @@ public class CategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
         Log.d(TAG,"onCreate");
+
+
+        Button button = findViewById(R.id.test1);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                });
+            }
+        });
+
 
         dbAccess = DBAccess.getInstance(getApplicationContext());
 

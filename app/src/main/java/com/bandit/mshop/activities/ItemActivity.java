@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SoundEffectConstants;
 import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -82,6 +84,7 @@ public class ItemActivity extends AppCompatActivity {
                 fragmentManager=getSupportFragmentManager();
                 changeFragment("item", R.id.containerItem, bundle);
             }
+
         });
 
         FloatingActionButton fab = findViewById(R.id.buttonCartItem);
