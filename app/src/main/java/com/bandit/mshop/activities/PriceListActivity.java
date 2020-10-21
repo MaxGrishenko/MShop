@@ -9,15 +9,22 @@ import com.bandit.mshop.adapters.PriceAdapterModel;
 import com.bandit.mshop.adapters.PriceListAdapter;
 import com.bandit.mshop.database.DBAccess;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import static com.bandit.mshop.activities.CategoryActivity.APP_PREFERENCES;
 
 public class PriceListActivity extends AppCompatActivity {
     private static final String TAG = "PriceListActivity";
     DBAccess dbAccess;
     PriceListAdapter priceAdapter;
     ListView listViewPrice;
+    SharedPreferences sPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,28 @@ public class PriceListActivity extends AppCompatActivity {
         listViewPrice.setAdapter(priceAdapter);
         dbAccess.close();
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch(keyCode){
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                sPref = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor1 = sPref.edit();
+                editor1.putBoolean("soundFlag", true);
+                editor1.apply();
+                Toast.makeText(this,"Звуковые эффекты включены", Toast.LENGTH_SHORT).show();
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                sPref = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor2 = sPref.edit();
+                editor2.putBoolean("soundFlag", false);
+                editor2.apply();
+                Toast.makeText(this,"Звуковые эффекты выключены", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     // PriceListActivity lifecycle =================================================================
     @Override
     public void onStart(){

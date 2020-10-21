@@ -1,5 +1,7 @@
 package com.bandit.mshop.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
@@ -23,6 +25,8 @@ import com.bandit.mshop.adapters.CartListAdapter;
 import com.bandit.mshop.database.DBAccess;
 import com.bandit.mshop.others.OnSwipeTouchListener;
 
+import static com.bandit.mshop.activities.CategoryActivity.APP_PREFERENCES;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -31,6 +35,7 @@ public class CartFragment extends Fragment {
     ListView listViewCart;
     DBAccess dbAccess;
     Integer[] cartItemId;
+    SharedPreferences sPref;
 
     public CartFragment() {
         // Required empty public constructor
@@ -87,8 +92,11 @@ public class CartFragment extends Fragment {
                     dbAccess.open();
                     dbAccess.sellItems(cartItemId);
                     dbAccess.close();
-                    final MediaPlayer mp = MediaPlayer.create(getActivity(), R.raw.s_sell);
-                    mp.start();
+                    sPref = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                    if(sPref.getBoolean("soundFlag", false)){
+                        final MediaPlayer mp = MediaPlayer.create(getActivity(), R.raw.s_sell);
+                        mp.start();
+                    }
 
                     Toast.makeText(getActivity(),"Продано!", Toast.LENGTH_SHORT).show();
                 }

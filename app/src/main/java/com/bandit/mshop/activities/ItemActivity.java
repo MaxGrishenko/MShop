@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -264,6 +265,27 @@ public class ItemActivity extends AppCompatActivity {
         }
     }
     //==============================================================================================
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch(keyCode){
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                sPref = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor1 = sPref.edit();
+                editor1.putBoolean("soundFlag", true);
+                editor1.apply();
+                Toast.makeText(this,"Звуковые эффекты включены", Toast.LENGTH_SHORT).show();
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                sPref = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor2 = sPref.edit();
+                editor2.putBoolean("soundFlag", false);
+                editor2.apply();
+                Toast.makeText(this,"Звуковые эффекты выключены", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     // ItemActivity lifecycle ==================================================================
     @Override
