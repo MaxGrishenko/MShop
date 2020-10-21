@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bandit.mshop.R;
+import com.bandit.mshop.activities.CategoryActivity;
 import com.bandit.mshop.database.DBAccess;
 import com.bandit.mshop.database.ItemModel;
 import com.bandit.mshop.others.OnScaleTouchListener;
@@ -135,8 +137,7 @@ public class ItemFragment extends Fragment {
             }
         });
         final RelativeLayout rlGest = view.findViewById(R.id.rlGest);
-        rlGest.setOnTouchListener(new OnScaleTouchListener(getContext()));
-/*        rlGest.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
+        rlGest.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             public void onSwipeTop() {
                 bBack.performClick();
             }
@@ -150,9 +151,12 @@ public class ItemFragment extends Fragment {
                 bToCart.performClick();
             }
 
-        });*/
+        });
+
         return view;
     }
+
+
 
     // From id get item
     private void setItemInfo(View view, CircularImageView ciPhoto, TextView tName,
@@ -163,6 +167,7 @@ public class ItemFragment extends Fragment {
         dbAccess.close();
         price = item.getPrice();
 
+        ciPhoto.setTag((int) item.getId());
         ciPhoto.setImageBitmap(item.getImage());
         tName.setText(item.getName());
         tPrice.setText(String.valueOf(price));

@@ -26,7 +26,7 @@ import com.bandit.mshop.others.OnSwipeTouchListener;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class    CartFragment extends Fragment {
+public class CartFragment extends Fragment {
     CartListAdapter cartAdapter;
     ListView listViewCart;
     DBAccess dbAccess;

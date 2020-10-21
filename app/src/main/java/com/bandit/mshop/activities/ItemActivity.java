@@ -12,9 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SoundEffectConstants;
 import android.view.View;
-import android.view.accessibility.AccessibilityEvent;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -27,6 +25,7 @@ import com.bandit.mshop.adapters.ItemListAdapter;
 import com.bandit.mshop.database.DBAccess;
 import com.bandit.mshop.fragments.CartFragment;
 import com.bandit.mshop.fragments.HelpFragment;
+import com.bandit.mshop.fragments.ImageFragment;
 import com.bandit.mshop.fragments.ItemFragment;
 import com.bandit.mshop.others.LateItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -174,6 +173,13 @@ public class ItemActivity extends AppCompatActivity {
     }
     //==============================================================================================
 
+    public void clickShowImage(View view){
+        Bundle bundle = new Bundle();
+        bundle.putInt("itemId", (int) view.getTag());
+        int i = (int) view.getTag();
+        changeFragment("image", R.id.containerItem, bundle);
+    }
+
     // Fragment work ===============================================================================
     private void changeFragment(String fragmentType, int fragmentContainer, Bundle data){
         Fragment fragment;
@@ -190,10 +196,17 @@ public class ItemActivity extends AppCompatActivity {
                 else if (fragment instanceof ItemFragment && fragmentType != "item"){
                     removeFragment(fragmentContainer);
                 }
+                else if (fragment instanceof ImageFragment && fragmentType != "item"){
+                    removeFragment(fragmentContainer);
+                }
                 else fragmentType = "null";
             }
         }
         switch (fragmentType){
+            case "image":
+                fragment = new ImageFragment();
+                fragment.setArguments(data);
+                break;
             case "item":
                 fragment = new ItemFragment();
                 fragment.setArguments(data);

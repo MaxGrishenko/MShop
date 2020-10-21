@@ -1,7 +1,6 @@
 package com.bandit.mshop.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MotionEventCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -10,15 +9,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -28,11 +24,10 @@ import android.widget.Toast;
 import com.bandit.mshop.R;
 import com.bandit.mshop.adapters.CategoryAdapterModel;
 import com.bandit.mshop.adapters.CategoryListAdapter;
-import com.bandit.mshop.adapters.ItemAdapterModel;
-import com.bandit.mshop.adapters.ItemListAdapter;
 import com.bandit.mshop.database.DBAccess;
 import com.bandit.mshop.fragments.CartFragment;
 import com.bandit.mshop.fragments.HelpFragment;
+import com.bandit.mshop.fragments.ImageFragment;
 import com.bandit.mshop.fragments.ItemFragment;
 import com.bandit.mshop.others.LateItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -64,21 +59,6 @@ public class CategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
         Log.d(TAG,"onCreate");
-
-
-        Button button = findViewById(R.id.test1);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        finish();
-                    }
-                });
-            }
-        });
-
 
         dbAccess = DBAccess.getInstance(getApplicationContext());
 
@@ -289,10 +269,26 @@ public class CategoryActivity extends AppCompatActivity {
     }
     //==============================================================================================
 
+    // Show ImageFragment ==========================================================================
+    public void clickShowImage(View view){
+        Bundle bundle = new Bundle();
+        bundle.putInt("itemId", (int) view.getTag());
+        int i = (int) view.getTag();
+        changeFragment("image", R.id.containerCategory, bundle);
+    }
+    //==============================================================================================
+
     // Fragment work ===============================================================================
     private void changeFragment(String fragmentType, int fragmentContainer, Bundle data){
         Fragment fragment;
         fragmentManager=getSupportFragmentManager();
+        if (fragmentType == "close"){
+            if (isFragmentActive){
+                isFragmentActive = false;
+                removeFragment(fragmentContainer);
+            }
+            return;
+        }
 
         if (isFragmentActive){
             fragment = fragmentManager.findFragmentById(fragmentContainer);
@@ -305,10 +301,17 @@ public class CategoryActivity extends AppCompatActivity {
             else if (fragment instanceof ItemFragment && fragmentType != "item"){
                 removeFragment(fragmentContainer);
             }
+            else if (fragment instanceof ImageFragment && fragmentType != "item"){
+                removeFragment(fragmentContainer);
+            }
             else fragmentType = "null";
         }
 
         switch (fragmentType) {
+            case "image":
+                fragment = new ImageFragment();
+                fragment.setArguments(data);
+                break;
             case "item":
                 fragment = new ItemFragment();
                 fragment.setArguments(data);
@@ -364,6 +367,7 @@ public class CategoryActivity extends AppCompatActivity {
                 changeFragment("help", R.id.containerCategory, null);
                 return true;
             case R.id.item_price_list:
+                changeFragment("close", R.id.containerCategory, null);
                 Intent intent = new Intent(this, PriceListActivity.class);
                 startActivity(intent);
                 return true;

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80090909"
+    android:id="@+id/relativeLayoutImage"
+    tools:context=".fragments.ImageFragment">
+
+    <ImageView
+        android:foregroundGravity="center_horizontal|center_vertical"
+        android:id="@+id/imageViewImage"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:minWidth="200dp"
+        android:minHeight="200dp"
+        android:layout_height="wrap_content">
+    </ImageView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+
+        android:id="@+id/buttonCloseImage"
+        android:layout_margin="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#AA1C1C"/>
+
+</RelativeLayout>

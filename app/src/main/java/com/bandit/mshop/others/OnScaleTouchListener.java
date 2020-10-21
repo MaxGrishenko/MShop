@@ -9,7 +9,6 @@ public class OnScaleTouchListener implements View.OnTouchListener, ScaleGestureD
     private View view;
     private ScaleGestureDetector gestureScale;
     private float scaleFactor = 1;
-    private boolean inScale = false;
 
     public OnScaleTouchListener (Context c){
         gestureScale = new ScaleGestureDetector(c, this);
@@ -25,8 +24,8 @@ public class OnScaleTouchListener implements View.OnTouchListener, ScaleGestureD
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
         scaleFactor *= detector.getScaleFactor();
-        scaleFactor = (scaleFactor < 1 ? 1 : scaleFactor); // prevent our view from becoming too small //
-        scaleFactor = ((float)((int)(scaleFactor * 100))) / 100; // Change precision to help with jitter when user just rests their fingers //
+        scaleFactor = Math.max(0.5f, Math.min(scaleFactor, 1.6f));
+        scaleFactor = ((float)((int)(scaleFactor * 100))) / 100;
         view.setScaleX(scaleFactor);
         view.setScaleY(scaleFactor);
         return true;
@@ -34,10 +33,12 @@ public class OnScaleTouchListener implements View.OnTouchListener, ScaleGestureD
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
-        inScale = true;
+        //inScale = true;
         return true;
     }
 
     @Override
-    public void onScaleEnd(ScaleGestureDetector detector) { inScale = false; }
+    public void onScaleEnd(ScaleGestureDetector detector) {
+        //inScale = false;
+    }
 }

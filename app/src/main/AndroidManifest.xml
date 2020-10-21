@@ -10,21 +10,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MShop">
         <activity
+            android:launchMode="singleTask"
             android:name=".activities.CategoryActivity"
             android:label="Категории">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.ItemActivity"
+            android:parentActivityName=".activities.ItemActivity"
             android:label="Товары">
         </activity>
         <activity
             android:name=".activities.PriceListActivity"
-            android:label="Прейскурант">
+            android:parentActivityName=".activities.CategoryActivity"
+            android:label="Прейскурант цен">
         </activity>
     </application>
 </manifest>
