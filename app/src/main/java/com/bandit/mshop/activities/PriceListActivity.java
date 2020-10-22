@@ -20,7 +20,7 @@ import android.widget.Toast;
 import static com.bandit.mshop.activities.CategoryActivity.APP_PREFERENCES;
 
 public class PriceListActivity extends AppCompatActivity {
-    private static final String TAG = "PriceListActivity";
+    private static final String TAG = "MPriceListActivity";
     DBAccess dbAccess;
     PriceListAdapter priceAdapter;
     ListView listViewPrice;

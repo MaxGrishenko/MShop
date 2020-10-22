@@ -62,8 +62,12 @@ public class CartFragment extends Fragment {
             int sum = 0;
             Integer[] price = cartAdapterModel.getPrice();
             Integer[] amount = cartAdapterModel.getAmount();
+            Integer[] discount = cartAdapterModel.getDiscount();
             for(int i = 0; i < price.length; i++){
-                sum += price[i] * amount[i];
+                if (discount[i] != 0){
+                    sum += price[i] / discount[i] * amount[i];
+                }
+                else sum += price[i] * amount[i];
             }
             tSum.setText(String.valueOf(sum));
         }
@@ -93,7 +97,7 @@ public class CartFragment extends Fragment {
                     dbAccess.sellItems(cartItemId);
                     dbAccess.close();
                     sPref = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-                    if(sPref.getBoolean("soundFlag", false)){
+                    if(sPref.getBoolean("soundFlag", true)){
                         final MediaPlayer mp = MediaPlayer.create(getActivity(), R.raw.s_sell);
                         mp.start();
                     }
@@ -105,21 +109,6 @@ public class CartFragment extends Fragment {
                 }
                 getActivity().onBackPressed();
             }
-        });
-
-        final ListView lvGest = view.findViewById(R.id.listViewCart);
-        lvGest.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
-            public void onSwipeTop() {
-                bBack.performClick();
-            }
-            public void onSwipeRight() {
-            }
-            public void onSwipeLeft() {
-            }
-            public void onSwipeBottom() {
-                bSell.performClick();
-            }
-
         });
         
         return view;

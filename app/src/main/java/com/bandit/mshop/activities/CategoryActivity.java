@@ -31,6 +31,7 @@ import com.bandit.mshop.fragments.HelpFragment;
 import com.bandit.mshop.fragments.ImageFragment;
 import com.bandit.mshop.fragments.ItemFragment;
 import com.bandit.mshop.others.LateItem;
+import com.bandit.mshop.others.NotificationEventReceiver;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -39,7 +40,6 @@ import java.util.List;
 
 public class CategoryActivity extends AppCompatActivity {
     private static final String TAG = "CategoryActivity";
-    public boolean soundFlag = true;
 
     DBAccess dbAccess;
     CategoryListAdapter categoryAdapter;
@@ -61,6 +61,7 @@ public class CategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
+        NotificationEventReceiver.setupAlarm(getApplicationContext());
         Log.d(TAG,"onCreate");
 
         dbAccess = DBAccess.getInstance(getApplicationContext());

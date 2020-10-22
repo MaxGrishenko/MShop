@@ -33,12 +33,10 @@ public class OnScaleTouchListener implements View.OnTouchListener, ScaleGestureD
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
-        //inScale = true;
         return true;
     }
 
     @Override
     public void onScaleEnd(ScaleGestureDetector detector) {
-        //inScale = false;
     }
 }

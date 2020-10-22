@@ -23,6 +23,7 @@ import com.bandit.mshop.R;
 import com.bandit.mshop.activities.CategoryActivity;
 import com.bandit.mshop.database.DBAccess;
 import com.bandit.mshop.database.ItemModel;
+import com.bandit.mshop.others.LateItem;
 import com.bandit.mshop.others.OnScaleTouchListener;
 import com.bandit.mshop.others.OnSwipeTouchListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -39,9 +40,8 @@ import static com.bandit.mshop.activities.CategoryActivity.APP_PREFERENCES;
 public class ItemFragment extends Fragment {
     private static final String TAG = "Gest";
     DBAccess dbAccess;
-    private ScaleGestureDetector mScaleGestureDetector;
-    private float mScaleFactor = 1.0f;
     int price;
+    int discount;
     int indexItem;
     ArrayList<Integer> idItemList;
     SharedPreferences sPref;
@@ -70,7 +70,6 @@ public class ItemFragment extends Fragment {
         final TextView tTotalPrice = view.findViewById(R.id.textViewTotalPriceFragment);
         final ImageButton bDelete = view.findViewById(R.id.buttonDeleteFragment);
         setItemInfo(view, ciPhoto, tName, tPrice, tDescription, tAmount, tTotalPrice, bDelete);
-
 
         ImageButton bBack = view.findViewById(R.id.buttonBackFragment);
         ImageButton bToCart = view.findViewById(R.id.buttonCartFragment);
@@ -102,7 +101,7 @@ public class ItemFragment extends Fragment {
                 if (amount != 9) {
                     amount += 1;
                     tAmount.setText(String.valueOf(amount));
-                    tTotalPrice.setText(String.valueOf(amount * price));
+                    tTotalPrice.setText(String.valueOf(price / discount * amount));
                 }
             }
         });
@@ -113,7 +112,7 @@ public class ItemFragment extends Fragment {
                 if (amount != 1) {
                     amount -= 1;
                     tAmount.setText(String.valueOf(amount));
-                    tTotalPrice.setText(String.valueOf(amount * price));
+                    tTotalPrice.setText(String.valueOf(price / discount * amount));
                 }
             }
         });
@@ -156,8 +155,6 @@ public class ItemFragment extends Fragment {
         return view;
     }
 
-
-
     // From id get item
     private void setItemInfo(View view, CircularImageView ciPhoto, TextView tName,
                              TextView tPrice, TextView tDescription, TextView tAmount, TextView tTotalPrice, ImageButton bDelete) {
@@ -170,68 +167,20 @@ public class ItemFragment extends Fragment {
         ciPhoto.setTag((int) item.getId());
         ciPhoto.setImageBitmap(item.getImage());
         tName.setText(item.getName());
-        tPrice.setText(String.valueOf(price));
-        tDescription.setText(item.getDescription());
-        tAmount.setText(String.valueOf(1));
-        tTotalPrice.setText(String.valueOf(price));
 
-        int idItem = idItemList.get(indexItem);
-        setLateItems(idItem);
-    }
+        if (item.getDiscount() != 0){
+            discount = item.getDiscount();
 
-    // LateItems work ==============================================================================
-    private void setLateItems(int idItem){
-        SharedPreferences.Editor editor = sPref.edit();
-        if (sPref.contains("idItem4")){
-            if (checkDuplicate(4, idItem)){
-                editor.putInt("idItem4", sPref.getInt("idItem3", -1));
-                editor.putInt("idItem3", sPref.getInt("idItem2", -1));
-                editor.putInt("idItem2", sPref.getInt("idItem1", -1));
-                editor.putInt("idItem1", idItem);
-            }
-        }
-        else if (sPref.contains("idItem3")){
-            if (checkDuplicate(3, idItem)){
-                editor.putInt("idItem4", sPref.getInt("idItem3", -1));
-                editor.putInt("idItem3", sPref.getInt("idItem2", -1));
-                editor.putInt("idItem2", sPref.getInt("idItem1", -1));
-                editor.putInt("idItem1", idItem);
-            }
-        }
-        else if (sPref.contains("idItem2")){
-            if (checkDuplicate(2, idItem)){
-                editor.putInt("idItem3", sPref.getInt("idItem2", -1));
-                editor.putInt("idItem2", sPref.getInt("idItem1", -1));
-                editor.putInt("idItem1", idItem);
-            }
-        }
-        else if (sPref.contains("idItem1")){
-            if (checkDuplicate(1, idItem)){
-                editor.putInt("idItem2", sPref.getInt("idItem1", -1));
-                editor.putInt("idItem1", idItem);
-            }
         }
         else{
-            editor.putInt("idItem1", idItem);
+            discount = 1;
         }
-        editor.apply();
+
+        tPrice.setText(String.valueOf(price / discount));
+        tTotalPrice.setText(String.valueOf(price / discount));
+        tAmount.setText(String.valueOf(1));
+        tDescription.setText(item.getDescription());
+        int idItem = idItemList.get(indexItem);
+        LateItem.setLateItems(idItem, sPref);
     }
-    private boolean checkDuplicate(int size, int idItem){
-        switch (size){
-            case 1:
-                if (idItem == sPref.getInt("idItem1", -1)){ return false; }
-                break;
-            case 2:
-                if (idItem == sPref.getInt("idItem1", -1) || idItem == sPref.getInt("idItem2", -1)){ return false; }
-                break;
-            case 3:
-                if (idItem == sPref.getInt("idItem1", -1) || idItem == sPref.getInt("idItem2", -1) || idItem == sPref.getInt("idItem3", -1)){ return false; }
-                break;
-            case 4:
-                if (idItem == sPref.getInt("idItem1", -1) || idItem == sPref.getInt("idItem2", -1) || idItem == sPref.getInt("idItem3", -1) || idItem == sPref.getInt("idItem4", -1)){ return false; }
-                break;
-        }
-        return true;
-    }
-    //==============================================================================================
 }

@@ -5,12 +5,14 @@ public class PriceAdapterModel {
     private String[] categoryName;
     private String[] itemName;
     private Integer[] itemPrice;
+    private Integer[] itemDiscount;
 
-    public PriceAdapterModel(Integer[] itemId, String[] categoryName, String[] itemName, Integer[] itemPrice) {
+    public PriceAdapterModel(Integer[] itemId, String[] categoryName, String[] itemName, Integer[] itemPrice, Integer[] itemDiscount) {
         this.itemId = itemId;
         this.categoryName = categoryName;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
+        this.itemDiscount = itemDiscount;
     }
 
     public Integer[] getItemId() {
@@ -24,5 +26,8 @@ public class PriceAdapterModel {
     }
     public Integer[] getItemPrice() {
         return itemPrice;
+    }
+    public Integer[] getItemDiscount() {
+        return itemDiscount;
     }
 }

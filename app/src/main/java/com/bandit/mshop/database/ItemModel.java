@@ -8,13 +8,15 @@ public class ItemModel {
     private Bitmap image;
     private String description;
     private int price;
+    private int discount;
 
-    public ItemModel(int id, String name, Bitmap image, String description, int price){
+    public ItemModel(int id, String name, Bitmap image, String description, int price, int discount){
         this.id = id;
         this.name = name;
         this.image = image;
         this.description = description;
         this.price = price;
+        this.discount = discount;
     }
 
     public int getId() {
@@ -31,5 +33,8 @@ public class ItemModel {
     }
     public String getDescription() {
         return description;
+    }
+    public int getDiscount() {
+        return discount;
     }
 }

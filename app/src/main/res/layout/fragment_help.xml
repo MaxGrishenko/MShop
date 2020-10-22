@@ -34,7 +34,7 @@
         android:textSize="16dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:text="     Интерфейс прост и интуитивно понятен! Следовательно и наша помощь вам не нужна!"
+        android:text="     Интерфейс прост и интуитивно понятен! Следовательно и наша помощь вам не потребуется!"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
