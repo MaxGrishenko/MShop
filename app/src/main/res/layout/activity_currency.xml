@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.CurrencyActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/textRubCurrency"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textTitleCurrency"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:text="Курс 1 EUR к:"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/textBynCurrency"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textRubCurrency"
+        android:textColor="#000000"
+        android:textStyle="italic"
+        android:textSize="20dp"
+        android:text="RUB: 0.0"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/textBynCurrency"
+        android:textColor="#000000"
+        android:textStyle="italic"
+        android:textSize="20dp"
+        android:text="BYN: 0.0"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textUsdCurrency"
+        android:layout_below="@id/textBynCurrency"
+        android:layout_centerHorizontal="true"
+        android:textColor="#000000"
+        android:textStyle="italic"
+        android:textSize="20dp"
+        android:text="USD: 0.0"/>
+
+
+
+</RelativeLayout>

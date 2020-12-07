@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -34,9 +35,23 @@ import com.bandit.mshop.others.LateItem;
 import com.bandit.mshop.others.NotificationEventReceiver;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class CategoryActivity extends AppCompatActivity {
     private static final String TAG = "CategoryActivity";
@@ -369,6 +384,11 @@ public class CategoryActivity extends AppCompatActivity {
             case R.id.item_help:
                 fragmentManager=getSupportFragmentManager();
                 changeFragment("help", R.id.containerCategory, null);
+                return true;
+            case R.id.item_currency:
+                changeFragment("close", R.id.containerCategory, null);
+                Intent intent1 = new Intent(this, CurrencyActivity.class);
+                startActivity(intent1);
                 return true;
             case R.id.item_price_list:
                 changeFragment("close", R.id.containerCategory, null);

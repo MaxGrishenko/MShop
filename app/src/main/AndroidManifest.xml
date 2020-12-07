@@ -3,6 +3,7 @@
     package="com.bandit.mshop">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -25,11 +26,15 @@
         <activity
             android:name=".activities.ItemActivity"
             android:label="Товары"
-            android:parentActivityName=".activities.ItemActivity"></activity>
+            android:parentActivityName=".activities.ItemActivity" />
         <activity
             android:name=".activities.PriceListActivity"
             android:label="Прейскурант цен"
-            android:parentActivityName=".activities.CategoryActivity"></activity>
+            android:parentActivityName=".activities.CategoryActivity" />
+        <activity
+            android:name=".activities.CurrencyActivity"
+            android:label="Курс валют"
+            android:parentActivityName=".activities.CategoryActivity"/>
 
         <receiver android:name=".others.NotificationEventReceiver" />
         <receiver android:name=".others.NotificationServiceStarterReceiver">
@@ -39,11 +44,11 @@
                 <action android:name="android.intent.action.TIME_SET" />
             </intent-filter>
         </receiver>
+
         <service
             android:name=".services.DiscountService"
             android:enabled="true"
-            android:exported="true">
-        </service>
+            android:exported="true"></service>
     </application>
 
 </manifest>
